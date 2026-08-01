@@ -8,7 +8,7 @@ const defaultProps = {
     {
       title: "Produk",
       links: [
-        { name: "Semua Sneakers", href: "/shop" },
+        { name: "Semua Sneakers", href: "/product" },
         { name: "Koleksi Terbaru", href: "/collections/new" },
         { name: "Pria", href: "/collections/men" },
         { name: "Wanita", href: "/collections/women" },
@@ -34,7 +34,7 @@ const defaultProps = {
       ],
     },
   ],
-  copyright: "© 2026 AI Shop Sneakers. All rights reserved.",
+  copyright: "© 2026 Sneakers. All rights reserved.",
   legalLinks: [
     { name: "Syarat & Ketentuan", href: "/terms" },
     { name: "Kebijakan Privasi", href: "/privacy" },
@@ -52,7 +52,7 @@ const Footer = ({ className }: { className?: string }) => {
             <div className="col-span-2 mb-8 lg:mb-0">
               <div className="flex items-center lg:justify-start">
                 <Link href="/" className="flex items-center gap-2 font-bold text-2xl tracking-tighter">
-                  AI<span className="text-muted-foreground">Shop</span>
+                  Sneakers
                 </Link>
               </div>
               <p className="mt-4 text-sm font-medium text-muted-foreground max-w-sm">

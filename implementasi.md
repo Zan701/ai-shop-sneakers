@@ -247,14 +247,15 @@ Jawaban AI
 
 ## Phase 3
 
-### Authentication
+### Authentication (NextAuth.js v5)
 
-- [ ] Login
-- [ ] Register
-- [ ] Session
-- [ ] Middleware
-- [ ] Role User
-- [ ] Role Admin
+- [x] Update Prisma Schema (Account, Session, VerificationToken)
+- [x] Install dependencies (`next-auth@beta`, `@auth/prisma-adapter`, `bcryptjs`)
+- [x] Configure `auth.config.ts` dan `auth.ts`
+- [x] Create API Route `app/api/auth/[...nextauth]/route.ts`
+- [x] Setup Environment Variables (AUTH_SECRET, Google OAuth)
+- [x] Update UI Navbar (Login/Logout buttons based on Session)
+- [x] Implement Middleware for protected routes
 
 ---
 

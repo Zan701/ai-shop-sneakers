@@ -4,13 +4,14 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { cn } from "@/lib/utils";
+import { NextAuthProvider } from "@/components/session-provider";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI Shop Sneakers",
+  title: "Sneakers",
   description: "Toko sepatu pintar dengan AI assistant",
 };
 
@@ -22,11 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("h-full antialiased", "font-sans", geist.variable)}>
       <body className={`${inter.className} min-h-full flex flex-col`}>
-        <Navbar />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <NextAuthProvider>
+          <Navbar />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </NextAuthProvider>
       </body>
     </html>
   );
