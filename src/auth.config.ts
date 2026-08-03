@@ -14,13 +14,33 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isProtected = nextUrl.pathname.startsWith('/admin') || nextUrl.pathname.startsWith('/cart');
+      const isAdminRoute = nextUrl.pathname.startsWith('/dashboard');
+      const isCartRoute = nextUrl.pathname.startsWith('/cart');
       
-      if (isProtected) {
+      if (isAdminRoute) {
+        // Hanya izinkan jika login dan role-nya ADMIN
+        return isLoggedIn && auth?.user?.role === "ADMIN";
+      }
+
+      if (isCartRoute) {
         if (isLoggedIn) return true;
         return false;
       }
       return true;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id as string;
+        token.role = user.role as "USER" | "ADMIN";
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.role = token.role;
+      }
+      return session;
     },
   },
 } satisfies NextAuthConfig;

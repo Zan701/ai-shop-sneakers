@@ -59,7 +59,14 @@ export default function LoginPage({
       setError("Email atau password salah!");
       setLoading(false);
     } else if (res?.ok) {
-      router.push("/");
+      const sessionRes = await fetch("/api/auth/session");
+      const session = await sessionRes.json();
+      
+      if (session?.user?.role === "ADMIN") {
+        router.push("/dashboard");
+      } else {
+        router.push("/");
+      }
       router.refresh();
     }
   }

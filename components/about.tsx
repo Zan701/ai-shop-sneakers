@@ -1,3 +1,9 @@
+import {
+  Marquee,
+  MarqueeContent,
+  MarqueeFade,
+  MarqueeItem,
+} from "@/src/components/kibo-ui/marquee";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -42,11 +48,11 @@ const About3 = ({
   title = "Tentang AI Sneakers",
   description = "Kami adalah destinasi utama bagi para pecinta sneakers. Dengan memadukan gaya hidup modern dan teknologi AI, kami membantu kamu menemukan sepatu yang paling cocok untuk setiap langkahmu.",
   mainImage = {
-    src: "https://images.unsplash.com/photo-1552346154-21d32810baa3?q=80&w=1200&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop",
     alt: "Koleksi Sneakers",
   },
   secondaryImage = {
-    src: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?q=80&w=800&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=800&auto=format&fit=crop",
     alt: "Sneakers Keren",
   },
   breakout = {
@@ -60,20 +66,28 @@ const About3 = ({
   },
   companies = [
     {
-      src: "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg",
+      src: "https://cdn.simpleicons.org/nike",
       alt: "Nike",
     },
     {
-      src: "https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg",
+      src: "https://cdn.simpleicons.org/adidas",
       alt: "Adidas",
     },
     {
-      src: "https://upload.wikimedia.org/wikipedia/commons/e/ea/New_Balance_logo.svg",
+      src: "https://cdn.simpleicons.org/puma",
+      alt: "Puma",
+    },
+    {
+      src: "https://cdn.simpleicons.org/newbalance",
       alt: "New Balance",
     },
     {
-      src: "https://upload.wikimedia.org/wikipedia/commons/8/87/Puma_logo.svg",
-      alt: "Puma",
+      src: "https://cdn.simpleicons.org/reebok",
+      alt: "Reebok",
+    },
+    {
+      src: "https://cdn.simpleicons.org/underarmour",
+      alt: "Under Armour",
     },
   ],
   achievementsTitle = "Pencapaian Kami",
@@ -116,17 +130,19 @@ const About3 = ({
           />
           <div className="flex flex-col gap-7 md:flex-row lg:flex-col">
             <div className="flex flex-col justify-between gap-6 rounded-xl bg-muted p-7 md:w-1/2 lg:w-auto">
-              <img
-                src={breakout.src}
-                alt={breakout.alt}
-                className="mr-auto h-12 dark:invert object-contain opacity-50"
-              />
+              {breakout.src && (
+                <img
+                  src={breakout.src}
+                  alt={breakout.alt}
+                  className="mr-auto h-12 dark:invert opacity-50 object-contain"
+                />
+              )}
               <div>
                 <p className="mb-2 text-lg font-semibold">{breakout.title}</p>
                 <p className="text-muted-foreground">{breakout.description}</p>
               </div>
               <a href={breakout.buttonUrl} className={cn(buttonVariants({ variant: "outline" }), "mr-auto")}>
-                  {breakout.buttonText}
+                {breakout.buttonText}
               </a>
             </div>
             <img
@@ -137,20 +153,28 @@ const About3 = ({
           </div>
         </div>
         {companies && (
-          <div className="py-24 border-y mt-24">
-            <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-60">
+          <div className="py-32">
+            <Marquee>
+              <MarqueeContent speed={40}>
                 {companies.map((company, idx) => (
-                  <img
-                    key={idx}
-                    src={company.src}
-                    alt={company.alt}
-                    className="h-8 md:h-12 w-auto dark:invert object-contain"
-                  />
+                  <MarqueeItem
+                    key={company.src + idx}
+                    className="mx-8 flex items-center"
+                  >
+                    <img
+                      src={company.src}
+                      alt={company.alt}
+                      className="h-7 w-auto md:h-8 dark:invert"
+                    />
+                  </MarqueeItem>
                 ))}
-            </div>
+              </MarqueeContent>
+              <MarqueeFade side="left" />
+              <MarqueeFade side="right" />
+            </Marquee>
           </div>
         )}
-        <div className="relative overflow-hidden rounded-xl bg-muted p-7 md:p-16 mt-24">
+        <div className="relative overflow-hidden rounded-xl bg-muted p-7 md:p-16">
           <div className="flex flex-col gap-4 text-center md:text-left">
             <h2 className="text-3xl font-medium md:text-4xl">
               {achievementsTitle}

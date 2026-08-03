@@ -1,6 +1,9 @@
+"use client";
+
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const defaultProps = {
   description: "Toko sepatu pintar pertama dengan AI assistant yang siap membantumu menemukan sneakers impian yang paling cocok dengan gayamu.",
@@ -42,7 +45,10 @@ const defaultProps = {
 };
 
 const Footer = ({ className }: { className?: string }) => {
+  const pathname = usePathname();
   const { description, sections, copyright, legalLinks } = defaultProps;
+
+  if (pathname?.startsWith("/dashboard")) return null;
 
   return (
     <section className={cn("py-16 mt-20 bg-muted/30 border-t", className)}>
