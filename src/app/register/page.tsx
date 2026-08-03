@@ -69,8 +69,7 @@ export default function RegisterPage({
             <Button 
               variant="outline" 
               className="w-full" 
-              onClick={() => signIn("google", { callbackUrl: "/" })}
-            >
+              onClick={() => signIn("google", { callbackUrl: "/" })}>
               <FcGoogle className="mr-2 h-5 w-5" />
               Daftar dengan Google
             </Button>
