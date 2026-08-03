@@ -62,9 +62,6 @@ export default function RegisterPage({
       <div className="flex h-full min-h-[calc(100vh-4rem)] items-center justify-center p-4">
         {/* Logo & Container */}
         <div className="flex flex-col items-center gap-6 lg:justify-start w-full">
-          <a href={logo.url} className="text-2xl font-bold tracking-tighter flex items-center gap-2">
-            🛒 AI Shop Sneakers
-          </a>
           <div className="flex w-full max-w-sm min-w-sm flex-col items-center gap-y-4 rounded-md border border-muted bg-background px-6 py-8 shadow-md">
             {heading && <h1 className="text-xl font-semibold mb-2">{heading}</h1>}
             
