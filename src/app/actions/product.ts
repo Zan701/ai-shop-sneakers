@@ -24,6 +24,18 @@ export async function getProducts() {
   }
 }
 
+export async function getProductById(id: string) {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id },
+      include: { category: true }
+    });
+    return { success: true, data: product };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
 export async function createProduct(formData: FormData) {
   try {
     const name = formData.get("name") as string;
@@ -51,6 +63,8 @@ export async function createProduct(formData: FormData) {
     });
 
     revalidatePath("/dashboard/products");
+    revalidatePath("/product");
+    revalidatePath("/");
     return { success: true, data: product };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -85,6 +99,9 @@ export async function updateProduct(id: string, formData: FormData) {
     });
 
     revalidatePath("/dashboard/products");
+    revalidatePath("/product");
+    revalidatePath("/");
+    revalidatePath(`/product/${id}`);
     return { success: true, data: product };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -98,6 +115,9 @@ export async function deleteProduct(id: string) {
     });
 
     revalidatePath("/dashboard/products");
+    revalidatePath("/product");
+    revalidatePath("/");
+    revalidatePath(`/product/${id}`);
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

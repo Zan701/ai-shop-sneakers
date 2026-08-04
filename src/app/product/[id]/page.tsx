@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { products } from "../../../data/products";
+import { getProductById } from "@/src/app/actions/product";
 
 interface PageProps {
   params: Promise<{
@@ -14,8 +14,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
   // Await params as required in Next.js 15+
   const { id } = await params;
   
-  // Mencari produk berdasarkan ID dari URL
-  const product = products.find((p) => p.id === id);
+  // Mencari produk berdasarkan ID dari URL ke Database
+  const res = await getProductById(id);
+  const product = res.success ? res.data : null;
 
   // Jika produk tidak ditemukan, arahkan ke halaman 404 (Not Found)
   if (!product) {
@@ -33,20 +34,20 @@ export default async function ProductDetailPage({ params }: PageProps) {
         {/* Kolom Kiri: Gambar Produk */}
         <div className="relative aspect-square md:aspect-[4/5] overflow-hidden rounded-3xl bg-muted border">
           <img
-            src={product.image}
+            src={product.image || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop"}
             alt={product.name}
             className="h-full w-full object-cover object-center"
           />
-          {product.badge && (
+          {(product as any).badge && (
             <span 
-              className={`absolute left-4 top-4 z-10 rounded-full px-3 py-1 text-sm font-semibold ${
-                product.badgeStyle === "destructive" ? "bg-destructive text-destructive-foreground" :
-                product.badgeStyle === "secondary" ? "bg-secondary text-secondary-foreground" :
-                product.badgeStyle === "outline" ? "border border-input bg-background text-foreground" :
+              className={`absolute left-4 top-4 z-10 rounded-full px-3 py-1 text-sm font-semibold shadow-sm ${
+                (product as any).badgeStyle === "destructive" ? "bg-destructive text-destructive-foreground" :
+                (product as any).badgeStyle === "secondary" ? "bg-secondary text-secondary-foreground" :
+                (product as any).badgeStyle === "outline" ? "border border-input bg-background text-foreground" :
                 "bg-primary text-primary-foreground"
               }`}
             >
-              {product.badge}
+              {(product as any).badge}
             </span>
           )}
         </div>
@@ -61,9 +62,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
             <span className="text-3xl font-bold text-foreground">
               {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.price)}
             </span>
-            {product.originalPrice && (
+            {(product as any).originalPrice && (
               <span className="text-xl text-muted-foreground line-through mb-1">
-                {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.originalPrice)}
+                {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format((product as any).originalPrice)}
               </span>
             )}
           </div>

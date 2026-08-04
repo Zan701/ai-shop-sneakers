@@ -6,6 +6,8 @@ export const metadata = {
   title: "Kelola Produk | AI Sneakers Admin",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ProductsPage() {
   // Fetch both products and categories in parallel
   const [productsRes, categoriesRes] = await Promise.all([
