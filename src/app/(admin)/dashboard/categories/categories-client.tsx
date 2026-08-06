@@ -21,7 +21,10 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
   const [categoryName, setCategoryName] = useState("");
   const [categorySlug, setCategorySlug] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
-  const [categoryImage, setCategoryImage] = useState("");
+  const [categoryImageFile, setCategoryImageFile] = useState<File | null>(null);
+  const [categoryImageUrl, setCategoryImageUrl] = useState("");
+  const [categoryIsActive, setCategoryIsActive] = useState(true);
+  const [categoryParentId, setCategoryParentId] = useState("");
 
   const handleOpenDialog = (category?: Category) => {
     setError("");
@@ -30,13 +33,19 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
       setCategoryName(category.name);
       setCategorySlug(category.slug || "");
       setCategoryDescription(category.description || "");
-      setCategoryImage(category.image || "");
+      setCategoryImageUrl(category.image || "");
+      setCategoryImageFile(null);
+      setCategoryIsActive(category.isActive ?? true);
+      setCategoryParentId(category.parentId || "");
     } else {
       setEditingId(null);
       setCategoryName("");
       setCategorySlug("");
       setCategoryDescription("");
-      setCategoryImage("");
+      setCategoryImageUrl("");
+      setCategoryImageFile(null);
+      setCategoryIsActive(true);
+      setCategoryParentId("");
     }
     setIsDialogOpen(true);
   };
@@ -56,7 +65,14 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
     formData.append("name", categoryName);
     formData.append("slug", categorySlug);
     formData.append("description", categoryDescription);
-    formData.append("image", categoryImage);
+    if (categoryImageFile) {
+      formData.append("image", categoryImageFile);
+    }
+    if (categoryImageUrl) {
+      formData.append("existingImageUrl", categoryImageUrl);
+    }
+    formData.append("isActive", String(categoryIsActive ?? true));
+    formData.append("parentId", categoryParentId);
 
     let res;
     if (editingId) {
@@ -116,7 +132,14 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
               initialCategories.map((cat, index) => (
                 <TableRow key={cat.id} className="group hover:bg-muted/30 transition-colors">
                   <TableCell className="font-medium">{index + 1}</TableCell>
-                  <TableCell className="font-semibold text-foreground/80">{cat.name}</TableCell>
+                  <TableCell className="font-semibold text-foreground/80">
+                    {cat.name}
+                    {!cat.isActive && (
+                      <span className="ml-2 text-xs font-normal bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 px-2 py-0.5 rounded-full">
+                        Nonaktif
+                      </span>
+                    )}
+                  </TableCell>
                   <TableCell className="text-muted-foreground">-</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -178,14 +201,51 @@ export default function CategoriesClient({ initialCategories }: { initialCategor
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="image">URL Gambar (Opsional)</Label>
+                <Label htmlFor="image">Gambar Kategori (Opsional)</Label>
+                {categoryImageUrl && (
+                  <div className="mb-2 text-xs text-muted-foreground">
+                    Gambar saat ini: <a href={categoryImageUrl} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline">Lihat Gambar</a>
+                  </div>
+                )}
                 <Input
                   id="image"
-                  value={categoryImage}
-                  onChange={(e) => setCategoryImage(e.target.value)}
-                  placeholder="https://example.com/image.png"
-                  className="rounded-xl"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      setCategoryImageFile(e.target.files[0]);
+                    } else {
+                      setCategoryImageFile(null);
+                    }
+                  }}
+                  className="rounded-xl cursor-pointer file:cursor-pointer"
                 />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="parentId">Kategori Induk (Opsional)</Label>
+                <select
+                  id="parentId"
+                  value={categoryParentId}
+                  onChange={(e) => setCategoryParentId(e.target.value)}
+                  className="flex h-9 w-full rounded-xl border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="">-- Tidak ada (Kategori Utama) --</option>
+                  {initialCategories
+                    .filter(c => c.id !== editingId) // Jangan izinkan pilih diri sendiri
+                    .map(c => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  type="checkbox"
+                  id="isActive"
+                  checked={categoryIsActive}
+                  onChange={(e) => setCategoryIsActive(e.target.checked)}
+                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                />
+                <Label htmlFor="isActive" className="cursor-pointer font-medium">Kategori Aktif</Label>
               </div>
               {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
             </div>
