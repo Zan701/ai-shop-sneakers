@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { getCategories } from "@/src/app/actions/category";
 
-export const dynamic = "force-dynamic";
-
 export async function ProductCategoriesGrid() {
   const res = await getCategories();
   const categories = res.success ? (res.data || []) : [];
