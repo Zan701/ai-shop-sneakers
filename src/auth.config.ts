@@ -14,7 +14,7 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isAdminRoute = nextUrl.pathname.startsWith('/dashboard');
+      const isAdminRoute = nextUrl.pathname.startsWith('/admin');
       const isCartRoute = nextUrl.pathname.startsWith('/cart');
       
       if (isAdminRoute) {

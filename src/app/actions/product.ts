@@ -55,7 +55,7 @@ export async function createProduct(formData: FormData) {
       },
     });
 
-    revalidatePath("/dashboard/products");
+    revalidatePath("/admin/products");
     revalidatePath("/product");
     revalidatePath("/");
     return { success: true, data: product };
@@ -91,7 +91,7 @@ export async function updateProduct(id: string, formData: FormData) {
       },
     });
 
-    revalidatePath("/dashboard/products");
+    revalidatePath("/admin/products");
     revalidatePath("/product");
     revalidatePath("/");
     revalidatePath(`/product/${id}`);
@@ -107,7 +107,7 @@ export async function deleteProduct(id: string) {
       where: { id },
     });
 
-    revalidatePath("/dashboard/products");
+    revalidatePath("/admin/products");
     revalidatePath("/product");
     revalidatePath("/");
     revalidatePath(`/product/${id}`);

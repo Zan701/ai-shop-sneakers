@@ -37,7 +37,6 @@ export async function createCategory(formData: FormData) {
     const name = formData.get("name") as string;
     let slug = (formData.get("slug") as string)?.trim();
     const description = (formData.get("description") as string)?.trim() || null;
-    const parentId = (formData.get("parentId") as string)?.trim() || null;
     const isActive = formData.get("isActive") === "true";
     
     if (!name || name.trim() === "") {
@@ -63,12 +62,11 @@ export async function createCategory(formData: FormData) {
         slug: slug,
         description: description,
         image: imageUrl,
-        parentId: parentId,
         isActive: isActive,
       },
     });
 
-    revalidatePath("/dashboard/categories");
+    revalidatePath("/admin/categories");
     return { success: true, data: category };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -80,7 +78,6 @@ export async function updateCategory(id: string, formData: FormData) {
     const name = formData.get("name") as string;
     let slug = (formData.get("slug") as string)?.trim();
     const description = (formData.get("description") as string)?.trim() || null;
-    const parentId = (formData.get("parentId") as string)?.trim() || null;
     const isActive = formData.get("isActive") === "true";
     
     if (!name || name.trim() === "") {
@@ -96,9 +93,7 @@ export async function updateCategory(id: string, formData: FormData) {
       return { success: false, error: "Slug sudah digunakan oleh kategori lain" };
     }
 
-    if (parentId === id) {
-      return { success: false, error: "Kategori tidak dapat menjadi parent untuk dirinya sendiri" };
-    }
+
 
     // Handle File Upload
     const imageFile = formData.get("image") as File | null;
@@ -112,12 +107,11 @@ export async function updateCategory(id: string, formData: FormData) {
         slug: slug,
         description: description,
         image: imageUrl,
-        parentId: parentId,
         isActive: isActive,
       },
     });
 
-    revalidatePath("/dashboard/categories");
+    revalidatePath("/admin/categories");
     return { success: true, data: category };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -135,20 +129,13 @@ export async function deleteCategory(id: string) {
       return { success: false, error: `Tidak dapat menghapus kategori. Ada ${productsCount} produk yang menggunakan kategori ini.` };
     }
 
-    // Check if category has children
-    const childrenCount = await prisma.category.count({
-      where: { parentId: id }
-    });
 
-    if (childrenCount > 0) {
-      return { success: false, error: `Tidak dapat menghapus kategori. Ada ${childrenCount} sub-kategori di bawah kategori ini.` };
-    }
 
     await prisma.category.delete({
       where: { id },
     });
 
-    revalidatePath("/dashboard/categories");
+    revalidatePath("/admin/categories");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

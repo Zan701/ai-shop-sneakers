@@ -76,11 +76,11 @@ const sidebarData: SidebarData = {
     {
       title: "Menu Utama",
       items: [
-        { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-        { label: "Kategori", icon: Tags, href: "/dashboard/categories" },
-        { label: "Produk", icon: Package, href: "/dashboard/products" },
-        { label: "Pesanan", icon: ShoppingCart, href: "/dashboard/orders" },
-        { label: "Pelanggan", icon: Users, href: "/dashboard/users" },
+        { label: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
+        { label: "Kategori", icon: Tags, href: "/admin/categories" },
+        { label: "Produk", icon: Package, href: "/admin/products" },
+        { label: "Pesanan", icon: ShoppingCart, href: "/admin/orders" },
+        { label: "Pelanggan", icon: Users, href: "/admin/users" },
       ],
     },
   ],
@@ -96,7 +96,7 @@ const SidebarLogo = ({ logo }: { logo: SidebarData["logo"] }) => {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size="lg" render={<Link href="/dashboard" />}>
+        <SidebarMenuButton size="lg" render={<Link href="/admin/dashboard" />}>
           <div className="flex aspect-square size-8 items-center justify-center rounded-sm bg-primary">
             <img
               src={logo.src}
@@ -134,7 +134,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
                   const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
                   return (
                     <SidebarMenuItem key={item.label}>
-                      <SidebarMenuButton render={<Link href={item.href} />} isActive={isActive && item.href !== "/dashboard" || pathname === item.href}>
+                      <SidebarMenuButton render={<Link href={item.href} />} isActive={isActive && item.href !== "/admin/dashboard" || pathname === item.href}>
                         <item.icon />
                         <span>{item.label}</span>
                       </SidebarMenuButton>
@@ -201,7 +201,7 @@ const AdminSidebar = ({ className, children }: AdminSidebarProps) => {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="/dashboard">Admin</BreadcrumbLink>
+                <BreadcrumbLink href="/admin/dashboard">Admin</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>

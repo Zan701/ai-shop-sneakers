@@ -28,5 +28,4 @@ export async function ProductCategoriesGrid() {
         </div>
       </div>
     </section>
-  );
-}
+  );}

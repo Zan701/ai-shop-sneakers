@@ -63,7 +63,7 @@ export default function LoginPage({
       const session = await sessionRes.json();
       
       if (session?.user?.role === "ADMIN") {
-        router.push("/dashboard");
+        router.push("/admin");
       } else {
         router.push("/");
       }

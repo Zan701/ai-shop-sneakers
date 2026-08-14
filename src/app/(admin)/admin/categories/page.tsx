@@ -1,5 +1,5 @@
+import { CategoryTable } from "@/components/admin/category-table";
 import { getCategories } from "@/src/app/actions/category";
-import CategoriesClient from "./categories-client"; // Added comment to force TS Server refresh
 
 export const metadata = {
   title: "Kelola Kategori | AI Sneakers Admin",
@@ -20,9 +20,9 @@ export default async function CategoriesPage() {
           Gagal mengambil data kategori: {error}
         </div>
       )}
-
+  
       <div className="bg-background/80 backdrop-blur-2xl border rounded-3xl p-6 shadow-sm">
-        <CategoriesClient initialCategories={categories || []} />
+        <CategoryTable initialCategories={categories || []} />
       </div>
     </div>
   );
