@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Search, ShoppingCart, User, Heart, Menu } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { getCart } from "@/src/app/actions/cart";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -22,6 +24,25 @@ export function Navbar() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const isLoggedIn = status === "authenticated";
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      if (isLoggedIn) {
+        const res = await getCart();
+        if (res.success && res.data) {
+          const count = res.data.items.reduce((acc: number, item: any) => acc + item.quantity, 0);
+          setCartCount(count);
+        }
+      }
+    };
+
+    fetchCartCount();
+
+    // Listen for custom event when cart changes
+    window.addEventListener('cartUpdated', fetchCartCount);
+    return () => window.removeEventListener('cartUpdated', fetchCartCount);
+  }, [isLoggedIn, pathname]);
 
   if (pathname?.startsWith("/dashboard")) return null;
 
@@ -96,14 +117,16 @@ export function Navbar() {
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button variant="outline" size="icon" className="relative rounded-full">
+              <Link href="/cart" className={cn(buttonVariants({ variant: "outline", size: "icon" }), "relative rounded-full")}>
                 <ShoppingCart className="h-4 w-4" />
                 <span className="sr-only">Cart</span>
                 {/* Badge Indicator */}
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-                  0
-                </span>
-              </Button>
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
             </>
           ) : (
             <div className="flex items-center gap-2">

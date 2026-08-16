@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ShoppingCart, Heart } from "lucide-react";
+import { ArrowLeft, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProductById } from "@/src/app/actions/product";
 import { ProductGallery } from "@/components/user/product-gallery";
 import { ProductTabs } from "@/components/user/product-tabs";
+import { AddToCartForm } from "@/components/user/add-to-cart-form";
+import { auth } from "@/src/auth";
 
 interface PageProps {
   params: Promise<{
@@ -15,6 +17,8 @@ interface PageProps {
 export default async function ProductDetailPage({ params }: PageProps) {
   // Await params as required in Next.js 15+
   const { id } = await params;
+  const session = await auth();
+  const isLoggedIn = !!session?.user;
   
   // Mencari produk berdasarkan ID dari URL ke Database
   const res = await getProductById(id);
@@ -56,49 +60,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
             )}
           </div>
 
-          <div className="mt-8 space-y-6">
-            
-            {availableColors.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider">Pilih Warna</h3>
-                <div className="flex flex-wrap gap-2">
-                  {availableColors.map((color: any) => (
-                    <Button key={color} variant="outline" className="rounded-full px-5 font-medium">
-                      {color}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {availableSizes.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider">Pilih Ukuran</h3>
-                <div className="flex flex-wrap gap-2">
-                  {availableSizes.map((size: any) => (
-                    <Button key={size} variant="outline" className="h-12 w-12 rounded-full font-semibold">
-                      {size}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {availableColors.length === 0 && availableSizes.length === 0 && (
-              <p className="text-muted-foreground text-sm italic border p-4 rounded-xl bg-muted/20">
-                Varian untuk produk ini belum tersedia.
-              </p>
-            )}
-          </div>
-
-          <div className="mt-10 flex gap-4">
-            <Button size="lg" className="flex-1 rounded-full h-14 text-base font-semibold">
-              <ShoppingCart className="mr-2 h-5 w-5" />
-              Tambah ke Keranjang
-            </Button>
-            <Button size="icon" variant="outline" className="h-14 w-14 rounded-full">
-              <Heart className="h-6 w-6" />
-            </Button>
+          <div className="mt-8">
+            <AddToCartForm variants={product.variants} isLoggedIn={isLoggedIn} />
           </div>
         </div>
       </div>

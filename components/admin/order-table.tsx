@@ -68,6 +68,7 @@ export function OrderTable({ orders }: OrderTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-[50px]">No</TableHead>
               <TableHead>Invoice & Tanggal</TableHead>
               <TableHead>Pelanggan</TableHead>
               <TableHead>Produk</TableHead>
@@ -79,8 +80,9 @@ export function OrderTable({ orders }: OrderTableProps) {
           </TableHeader>
           <TableBody>
             {filteredOrders.length > 0 ? (
-              filteredOrders.map((order) => (
+              filteredOrders.map((order, index) => (
                 <TableRow key={order.id}>
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     <div className="font-medium">{order.invoiceNumber}</div>
                     <div className="text-xs text-muted-foreground">
@@ -124,7 +126,7 @@ export function OrderTable({ orders }: OrderTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
                   Tidak ada data pesanan.
                 </TableCell>
               </TableRow>
