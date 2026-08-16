@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ArrowLeft, ShoppingCart, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProductById } from "@/src/app/actions/product";
+import { ProductGallery } from "@/components/user/product-gallery";
+import { ProductTabs } from "@/components/user/product-tabs";
 
 interface PageProps {
   params: Promise<{
@@ -18,10 +20,14 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const res = await getProductById(id);
   const product = res.success ? res.data : null;
 
-  // Jika produk tidak ditemukan, arahkan ke halaman 404 (Not Found)
   if (!product) {
     notFound();
   }
+
+  // Extract Varian
+  const variants = product.variants || [];
+  const availableSizes = Array.from(new Set(variants.map((v: any) => v.size))).sort((a: any, b: any) => a - b);
+  const availableColors = Array.from(new Set(variants.map((v: any) => v.color)));
 
   return (
     <div className="container mx-auto px-4 md:px-8 py-12">
@@ -29,59 +35,60 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <ArrowLeft className="mr-2 h-4 w-4" />
         Kembali ke Produk
       </Link>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
-        {/* Kolom Kiri: Gambar Produk */}
-        <div className="relative aspect-square md:aspect-[4/5] overflow-hidden rounded-3xl bg-muted border">
-          <img
-            src={product.image || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop"}
-            alt={product.name}
-            className="h-full w-full object-cover object-center"
-          />
-          {(product as any).badge && (
-            <span 
-              className={`absolute left-4 top-4 z-10 rounded-full px-3 py-1 text-sm font-semibold shadow-sm ${
-                (product as any).badgeStyle === "destructive" ? "bg-destructive text-destructive-foreground" :
-                (product as any).badgeStyle === "secondary" ? "bg-secondary text-secondary-foreground" :
-                (product as any).badgeStyle === "outline" ? "border border-input bg-background text-foreground" :
-                "bg-primary text-primary-foreground"
-              }`}
-            >
-              {(product as any).badge}
-            </span>
-          )}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        {/* Kolom Kiri: Gambar Produk (Gallery) */}
+        <ProductGallery images={product.images || []} productName={product.name} />
 
         {/* Kolom Kanan: Detail Produk */}
-        <div className="flex flex-col justify-center">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+        <div className="flex flex-col max-w-xl pt-2">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
             {product.name}
           </h1>
           
-          <div className="mt-6 flex items-end gap-3">
-            <span className="text-3xl font-bold text-foreground">
-              {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.price)}
+          <div className="mt-4 flex items-end gap-3">
+            <span className="text-2xl font-bold text-foreground">
+              {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.discountPrice || product.price)}
             </span>
-            {(product as any).originalPrice && (
+            {product.discountPrice && (
               <span className="text-xl text-muted-foreground line-through mb-1">
-                {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format((product as any).originalPrice)}
+                {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.price)}
               </span>
             )}
           </div>
 
-          <p className="mt-8 text-lg text-muted-foreground leading-relaxed">
-            {product.description}
-          </p>
+          <div className="mt-8 space-y-6">
+            
+            {availableColors.length > 0 && (
+              <div className="space-y-3">
+                <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider">Pilih Warna</h3>
+                <div className="flex flex-wrap gap-2">
+                  {availableColors.map((color: any) => (
+                    <Button key={color} variant="outline" className="rounded-full px-5 font-medium">
+                      {color}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
 
-          <div className="mt-10 space-y-4">
-            <h3 className="font-semibold text-foreground">Pilih Ukuran</h3>
-            <div className="flex flex-wrap gap-3">
-              {[39, 40, 41, 42, 43, 44].map((size) => (
-                <Button key={size} variant="outline" className="h-12 w-12 rounded-full font-semibold">
-                  {size}
-                </Button>
-              ))}
-            </div>
+            {availableSizes.length > 0 && (
+              <div className="space-y-3">
+                <h3 className="font-semibold text-foreground text-sm uppercase tracking-wider">Pilih Ukuran</h3>
+                <div className="flex flex-wrap gap-2">
+                  {availableSizes.map((size: any) => (
+                    <Button key={size} variant="outline" className="h-12 w-12 rounded-full font-semibold">
+                      {size}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {availableColors.length === 0 && availableSizes.length === 0 && (
+              <p className="text-muted-foreground text-sm italic border p-4 rounded-xl bg-muted/20">
+                Varian untuk produk ini belum tersedia.
+              </p>
+            )}
           </div>
 
           <div className="mt-10 flex gap-4">
@@ -95,6 +102,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </div>
         </div>
       </div>
+
+      {/* Bagian Bawah: Tabs Deskripsi & Review */}
+      <ProductTabs description={product.description || ""} />
     </div>
   );
 }

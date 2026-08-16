@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { NextAuthProvider } from "@/components/session-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <TooltipProvider>
             {children}
+            <Toaster />
           </TooltipProvider>
         </NextAuthProvider>
       </body>

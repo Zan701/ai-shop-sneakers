@@ -80,7 +80,7 @@ const sidebarData: SidebarData = {
         { label: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
         { label: "Kategori", icon: Tags, href: "/admin/categories" },
         { label: "Brand", icon: Ad, href: "/admin/brands" },
-        { label: "Produk", icon: Package, href: "/admin/products" },
+        { label: "Produk", icon: Package, href: "/admin/product" },
         { label: "Pesanan", icon: ShoppingCart, href: "/admin/orders" },
         { label: "Pelanggan", icon: Users, href: "/admin/users" },
       ],
@@ -186,7 +186,7 @@ const AdminSidebar = ({ className, children }: AdminSidebarProps) => {
   
   // Menentukan breadcrumb aktif
   let activePage = "Dashboard";
-  if (pathname?.includes("/products")) activePage = "Produk";
+  if (pathname?.includes("/product")) activePage = "Produk";
   else if (pathname?.includes("/orders")) activePage = "Pesanan";
   else if (pathname?.includes("/users")) activePage = "Pelanggan";
 

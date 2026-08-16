@@ -52,9 +52,9 @@ export function BrandTable({ initialBrands }: { initialBrands: Brand[] }) {
           <TableHeader className="bg-muted/50">
             <TableRow>
               <TableHead className="w-[80px]">No</TableHead>
-              <TableHead>Gambar</TableHead>
               <TableHead>Nama Brand</TableHead>
               <TableHead>Slug</TableHead>
+              <TableHead>Gambar</TableHead>
               <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
@@ -69,7 +69,11 @@ export function BrandTable({ initialBrands }: { initialBrands: Brand[] }) {
               initialBrands.map((b, index) => (
                 <TableRow key={b.id} className="group hover:bg-muted/30 transition-colors">
                   <TableCell className="font-medium">{index + 1}</TableCell>
-                  <TableCell>
+                  <TableCell className="font-semibold text-foreground/80">
+                    {b.name}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">{b.slug}</TableCell>
+                   <TableCell>
                     {b.image ? (
                       <div className="w-12 h-12 rounded-lg border overflow-hidden bg-white flex items-center justify-center">
                         <img src={b.image} alt={b.name} className="w-full h-full object-cover" />
@@ -80,10 +84,6 @@ export function BrandTable({ initialBrands }: { initialBrands: Brand[] }) {
                       </div>
                     )}
                   </TableCell>
-                  <TableCell className="font-semibold text-foreground/80">
-                    {b.name}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{b.slug}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
                       <Link href={`/admin/brands/${b.id}/edit`}>

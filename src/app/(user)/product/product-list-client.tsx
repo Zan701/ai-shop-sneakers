@@ -38,7 +38,7 @@ export function ProductListClient({ initialProducts }: { initialProducts: any[] 
               </span>
             )}
             <img
-              src={product.image || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop"}
+              src={product.images?.[0]?.imageUrl || "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop"}
               alt={product.name}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -50,11 +50,11 @@ export function ProductListClient({ initialProducts }: { initialProducts: any[] 
             </p>
             <div className="mt-4 flex items-center gap-2">
               <span className="font-bold text-lg">
-                {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.price)}
+                {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.discountPrice || product.price)}
               </span>
-              {product.originalPrice && (
+              {product.discountPrice && (
                 <span className="text-xs text-muted-foreground line-through">
-                  {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.originalPrice)}
+                  {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(product.price)}
                 </span>
               )}
             </div>

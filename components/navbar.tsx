@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useSession, signOut } from "next-auth/react";
 
 export function Navbar() {
@@ -74,17 +75,12 @@ export function Navbar() {
                 <DropdownMenuTrigger
                   className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "rounded-full overflow-hidden outline-none")}
                 >
-                  {session?.user?.image ? (
-                    <img 
-                      src={session.user.image} 
-                      alt={session.user.name || "User profile"} 
-                      className="h-full w-full object-cover" 
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-primary text-primary-foreground font-semibold">
+                  <Avatar className="h-full w-full">
+                    <AvatarImage src={session?.user?.image || ""} alt={session?.user?.name || "User"} />
+                    <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
                       {(session?.user?.name || session?.user?.email || "U").charAt(0).toUpperCase()}
-                    </div>
-                  )}
+                    </AvatarFallback>
+                  </Avatar>
                   <span className="sr-only">Account Menu</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
