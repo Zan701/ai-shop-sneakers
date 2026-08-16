@@ -7,8 +7,8 @@ export const metadata = {
   title: "Edit Kategori | AI Sneakers Admin",
 };
 
-export default async function EditCategoryPage({ params }: { params: { id: string } }) {
-  const categoryId = params.id;
+export default async function EditCategoryPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: categoryId } = await params;
   
   // Ambil data kategori yang mau diedit
   const category = await prisma.category.findUnique({

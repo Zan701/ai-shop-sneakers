@@ -173,9 +173,7 @@ model Brand {
   name        String
   slug        String   @unique
   description String?  @db.Text
-  logo        String?
-  website     String?
-  country     String?
+  image       String?
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

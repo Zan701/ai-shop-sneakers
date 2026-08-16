@@ -11,6 +11,7 @@ import {
   Users,
   LogOut,
   Tags,
+  Ad,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -78,6 +79,7 @@ const sidebarData: SidebarData = {
       items: [
         { label: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
         { label: "Kategori", icon: Tags, href: "/admin/categories" },
+        { label: "Brand", icon: Ad, href: "/admin/brands" },
         { label: "Produk", icon: Package, href: "/admin/products" },
         { label: "Pesanan", icon: ShoppingCart, href: "/admin/orders" },
         { label: "Pelanggan", icon: Users, href: "/admin/users" },
