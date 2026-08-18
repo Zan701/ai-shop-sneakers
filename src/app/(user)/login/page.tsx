@@ -1,6 +1,7 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn as nextAuthSignIn, getSession } from "next-auth/react";
+import { loginAction } from "@/src/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -49,18 +50,13 @@ export default function LoginPage({
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    const res = await loginAction(formData);
 
     if (res?.error) {
-      setError("Email atau password salah!");
+      setError(res.error);
       setLoading(false);
-    } else if (res?.ok) {
-      const sessionRes = await fetch("/api/auth/session");
-      const session = await sessionRes.json();
+    } else if (res?.success) {
+      const session = await getSession();
       
       if (session?.user?.role === "ADMIN") {
         router.push("/admin");
@@ -84,7 +80,7 @@ export default function LoginPage({
             <Button 
               variant="outline" 
               className="w-full" 
-              onClick={() => signIn("google", { callbackUrl: "/" })}
+              onClick={() => nextAuthSignIn("google", { callbackUrl: "/" })}
             >
               <FcGoogle className="mr-2 h-5 w-5" />
               Masuk dengan Google

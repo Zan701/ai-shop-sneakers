@@ -2,6 +2,8 @@
 
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { signIn } from "@/src/auth";
+import { AuthError } from "next-auth";
 
 export async function registerAction(formData: FormData) {
   const name = formData.get("name") as string;
@@ -40,5 +42,33 @@ export async function registerAction(formData: FormData) {
   } catch (error) {
     console.error("Registration error:", error);
     return { error: "Terjadi kesalahan saat mendaftar. Coba lagi." };
+  }
+}
+
+export async function loginAction(formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  if (!email || !password) {
+    return { error: "Email dan password harus diisi!" };
+  }
+
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    return { success: true };
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Email atau password salah!" };
+        default:
+          return { error: "Terjadi kesalahan saat login." };
+      }
+    }
+    throw error;
   }
 }

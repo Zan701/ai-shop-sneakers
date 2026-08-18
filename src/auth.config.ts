@@ -16,13 +16,14 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       const isAdminRoute = nextUrl.pathname.startsWith('/admin');
       const isCartRoute = nextUrl.pathname.startsWith('/cart');
+      const isCheckoutRoute = nextUrl.pathname.startsWith('/checkout');
       
       if (isAdminRoute) {
         // Hanya izinkan jika login dan role-nya ADMIN
         return isLoggedIn && auth?.user?.role === "ADMIN";
       }
 
-      if (isCartRoute) {
+      if (isCartRoute || isCheckoutRoute) {
         if (isLoggedIn) return true;
         return false;
       }

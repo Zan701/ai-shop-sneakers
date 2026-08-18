@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -158,12 +159,9 @@ export default function CartPage() {
                 </span>
               </div>
 
-              <Button 
-                className="w-full h-12 text-base font-medium rounded-xl"
-                onClick={() => toast.info("Fitur Checkout akan segera hadir!")}
-              >
-                Beli Sekarang <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              <Link href="/checkout" className={cn(buttonVariants(), "w-full h-12 text-base font-medium rounded-xl")}>
+Beli Sekarang <ArrowRight className="ml-2 h-4 w-4" />
+</Link>
             </div>
           </div>
 
@@ -172,3 +170,4 @@ export default function CartPage() {
     </div>
   );
 }
+
