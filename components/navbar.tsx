@@ -74,9 +74,6 @@ export function Navbar() {
           <Link href="/faq" className={cn("transition-colors hover:text-foreground", pathname === "/faq" ? "text-foreground font-semibold" : "text-muted-foreground")}>
             FAQ
           </Link>
-          <Link href="/chat" className={cn("transition-colors hover:text-foreground flex items-center gap-1", pathname === "/chat" ? "text-primary font-semibold" : "text-muted-foreground")}>
-            AI Assistant
-          </Link>
         </nav>
 
         {/* Right Side Icons */}

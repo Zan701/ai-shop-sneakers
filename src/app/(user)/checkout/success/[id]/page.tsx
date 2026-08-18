@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { CheckCircle2, Package, ArrowRight, Home } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -68,7 +68,7 @@ export default async function CheckoutSuccessPage({ params }: { params: Promise<
           <Link href="/" className={cn(buttonVariants({ variant: "outline" }), "h-12 px-8 rounded-xl flex items-center")}>
             <Home className="mr-2 h-4 w-4" /> Kembali ke Beranda
           </Link>
-          <Link href="/profile" className={cn(buttonVariants(), "h-12 px-8 rounded-xl flex items-center")}>
+          <Link href="/profile/orders" className={cn(buttonVariants(), "h-12 px-8 rounded-xl flex items-center")}>
             Lihat Pesanan <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </div>

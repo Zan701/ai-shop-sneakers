@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { NextAuthProvider } from "@/components/session-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { ChatBubble } from "@/components/chat-bubble";
+
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -27,6 +29,7 @@ export default function RootLayout({
           <TooltipProvider>
             {children}
             <Toaster />
+                <ChatBubble/>
           </TooltipProvider>
         </NextAuthProvider>
       </body>
