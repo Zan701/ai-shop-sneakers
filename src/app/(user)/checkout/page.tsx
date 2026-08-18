@@ -21,6 +21,11 @@ export default function CheckoutPage() {
       setIsLoading(true);
       const res = await getCheckoutData();
       if (res.success && res.data) {
+        if (!res.data.address) {
+          toast.warning("Silakan isi alamat pengiriman Anda di profil terlebih dahulu.");
+          router.push("/profile");
+          return;
+        }
         setData(res.data);
       } else {
         toast.error(res.error || "Gagal memuat data checkout");
@@ -83,11 +88,11 @@ export default function CheckoutPage() {
             <div className="p-4 border border-primary/20 bg-primary/5 rounded-xl">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="font-semibold text-foreground">Alamat Utama (Dummy)</p>
-                  <p className="text-sm text-muted-foreground mt-1">John Doe - 08123456789</p>
-                  <p className="text-sm text-muted-foreground mt-1">Jl. Sudirman No. 123, Jakarta Selatan, DKI Jakarta 12190</p>
+                  <p className="font-semibold text-foreground">{data.address?.label || "Alamat Utama"}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{data.address?.recipientName} - {data.address?.phone}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{data.address?.address}, {data.address?.district}, {data.address?.city}, {data.address?.province} {data.address?.postalCode}</p>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => toast.info("Fitur manajemen alamat akan tersedia di Profil")}>
+                <Button variant="outline" size="sm" onClick={() => router.push("/profile")}>
                   Ubah
                 </Button>
               </div>

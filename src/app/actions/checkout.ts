@@ -39,11 +39,20 @@ export async function getCheckoutData() {
       return { success: false, error: "Keranjang belanja kosong" };
     }
 
-    // Since we are skipping the Address form for now, we'll return the cart data
-    // We can just use a dummy address inside the createOrder action for now
-    // Later, you can fetch UserAddress here
+    // Fetch default user address
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        addresses: {
+          where: { isDefault: true },
+          take: 1
+        }
+      }
+    });
+
+    const address = user?.addresses?.[0] || null;
     
-    return { success: true, data: { cart } };
+    return { success: true, data: { cart, address } };
   } catch (error) {
     console.error("Error getCheckoutData:", error);
     return { success: false, error: "Gagal mengambil data checkout" };
