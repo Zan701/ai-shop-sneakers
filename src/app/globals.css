@@ -134,3 +134,10 @@
     @apply mx-auto w-full max-w-7xl px-4 md:px-8;
   }
 }
+
+/* Menyembunyikan icon/widget Dev Tools Next.js secara paksa */
+nextjs-portal,
+#nextjs-dev-indicator,
+[data-nextjs-dialog-overlay] {
+  display: none !important;
+}
